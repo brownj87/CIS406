@@ -1,0 +1,58 @@
+// Jordan Brown, CIS406, Course Project Part 2
+package orderEntryPhase2;
+
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class OrderEntryPhase2 {
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        DecimalFormat df = new DecimalFormat("#0.00"); // For formatting decimals
+
+        // Prompt user for input
+        System.out.print("Enter item number: ");
+        String itemNumber = input.nextLine();
+
+        System.out.print("Enter item description: ");
+        String itemDescription = input.nextLine();
+
+        System.out.print("Enter item price: $");
+        double itemPrice = input.nextDouble();
+
+        System.out.print("Enter quantity ordered: ");
+        int quantityOrdered = input.nextInt();
+
+        // Calculate gross amount
+        double grossAmount = itemPrice * quantityOrdered;
+
+        System.out.print("Enter tax percent: ");
+        double taxPercent = input.nextDouble();
+
+        // Calculate tax amount
+        double taxAmount = grossAmount * (taxPercent / 100);
+
+        System.out.print("Enter discount percent: ");
+        double discountPercent = input.nextDouble();
+
+        // Calculate discount amount
+        double discountAmount = grossAmount * (discountPercent / 100);
+
+        // Calculate net amount
+        double netAmount = grossAmount + taxAmount - discountAmount;
+
+        // Display results
+        System.out.println("\nItem Number\tItem Description\tPrice\tQty\tTax %\tTax Amt\tDisc %\tDisc Amt\tNet Amt");
+        System.out.println(itemNumber + "\t\t" 
+                + itemDescription + "\t\t" 
+                + df.format(itemPrice) + "\t" 
+                + quantityOrdered + "\t" 
+                + df.format(taxPercent) + "\t" 
+                + df.format(taxAmount) + "\t" 
+                + df.format(discountPercent) + "\t" 
+                + df.format(discountAmount) + "\t" 
+                + df.format(netAmount));
+
+        input.close();
+    }
+}
