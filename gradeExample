@@ -1,0 +1,59 @@
+// Jordan Brown, CIS406
+// Letter Grade Converter Program
+// This program converts a numerical grade into a letter grade
+// and continues running until the user enters 'n' or 'N'.
+
+import java.util.Scanner;
+public class LetterGradeConverter {
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Welcome to the Letter Grade Converter\n");
+        char continueChoice = 'y';
+        // Loop continues until the user enters 'n' or 'N'
+        while (continueChoice == 'y' || continueChoice == 'Y') {
+            // Ask user for numeric grade
+            System.out.print("Enter numerical grade: ");
+            int grade = input.nextInt();
+            // Determine letter grade
+            String letterGrade;
+            if (grade >= 90 && grade <= 100) {
+                letterGrade = "A";
+            } 
+            else if (grade >= 80 && grade <= 89) {
+                letterGrade = "B";
+            } 
+            else if (grade >= 70 && grade <= 79) {
+                letterGrade = "C";
+            } 
+            else if (grade >= 60 && grade <= 69) {
+                letterGrade = "D";
+            } 
+            else if (grade >= 0 && grade < 60) {
+                letterGrade = "F";
+            } 
+            else {
+                letterGrade = "Invalid grade";
+            }
+
+            // Display the letter grade
+            System.out.println("Letter grade: " + letterGrade);
+
+            // Ask if user wants to continue
+            System.out.print("Continue? (y/n): ");
+            continueChoice = input.next().charAt(0);
+
+            // Validate continue response
+            while (continueChoice != 'y' && continueChoice != 'Y' &&
+                   continueChoice != 'n' && continueChoice != 'N') {
+
+                System.out.println("Invalid response.");
+                System.out.print("Continue? (y/n): ");
+                continueChoice = input.next().charAt(0);
+            }
+        }
+
+        System.out.println("Bye!!");
+        input.close();
+    }
+}
