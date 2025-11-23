@@ -1,73 +1,71 @@
-// Jordan Brown, CIS 406, Course Project Part 2 - Updated with aligned table
-package orderEntryPhase2;
+// Jordan Brown, CIS 406, Course Project Part 3
+package orderEntryPhase3;
 
 import java.util.Scanner;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
-public class OrderEntryPhase2 {
+public class OrderEntryPhase3 {
+
+    // Class to store item data
+    static class Item {
+        String itemNumber;
+        String itemDescription;
+        double itemPrice;
+        int quantity;
+        double taxPercent;
+        double discountPercent;
+        double grossAmount;
+        double taxAmount;
+        double discountAmount;
+        double netAmount;
+
+        Item(String itemNumber, String itemDescription, double itemPrice, int quantity,
+             double taxPercent, double discountPercent) {
+            this.itemNumber = itemNumber;
+            this.itemDescription = itemDescription;
+            this.itemPrice = itemPrice;
+            this.quantity = quantity;
+            this.taxPercent = taxPercent;
+            this.discountPercent = discountPercent;
+
+            this.grossAmount = itemPrice * quantity;
+            this.taxAmount = grossAmount * (taxPercent / 100);
+            this.discountAmount = grossAmount * (discountPercent / 100);
+            this.netAmount = grossAmount + taxAmount - discountAmount;
+        }
+    }
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         DecimalFormat df = new DecimalFormat("#0.00"); // For formatting decimals
 
-        // Totals
-        int totalItems = 0;
-        double totalGross = 0;
-        double totalTax = 0;
-        double totalDiscount = 0;
-        double totalNet = 0;
-
+        ArrayList<Item> items = new ArrayList<>();
         String continueEntry = "y";
 
-        // Print column headers
-        System.out.printf("%-12s %-20s %10s %5s %7s %10s %7s %10s %10s%n",
-                "Item Number", "Item Description", "Price", "Qty", "Tax %", "Tax Amt",
-                "Disc %", "Disc Amt", "Net Amt");
-
+        // Input loop
         while (!continueEntry.equalsIgnoreCase("n")) {
-            // Prompt user for input
             System.out.print("Enter item number: ");
             String itemNumber = input.nextLine();
+
             System.out.print("Enter item description: ");
             String itemDescription = input.nextLine();
+
             System.out.print("Enter item price: $");
             double itemPrice = input.nextDouble();
-            System.out.print("Enter quantity ordered: ");
-            int quantityOrdered = input.nextInt();
 
-            // Calculate amounts
-            double grossAmount = itemPrice * quantityOrdered;
+            System.out.print("Enter quantity ordered: ");
+            int quantity = input.nextInt();
 
             System.out.print("Enter tax percent: ");
             double taxPercent = input.nextDouble();
-            double taxAmount = grossAmount * (taxPercent / 100);
 
             System.out.print("Enter discount percent: ");
             double discountPercent = input.nextDouble();
-            double discountAmount = grossAmount * (discountPercent / 100);
 
-            double netAmount = grossAmount + taxAmount - discountAmount;
+            // Create item and add to list
+            items.add(new Item(itemNumber, itemDescription, itemPrice, quantity, taxPercent, discountPercent));
 
-            // Display item data
-            System.out.printf("%-12s %-20s %10s %5d %7s %10s %7s %10s %10s%n",
-                    itemNumber,
-                    itemDescription.length() > 20 ? itemDescription.substring(0, 20) : itemDescription,
-                    df.format(itemPrice),
-                    quantityOrdered,
-                    df.format(taxPercent),
-                    df.format(taxAmount),
-                    df.format(discountPercent),
-                    df.format(discountAmount),
-                    df.format(netAmount));
-
-            // Update totals
-            totalItems++;
-            totalGross += grossAmount;
-            totalTax += taxAmount;
-            totalDiscount += discountAmount;
-            totalNet += netAmount;
-
-            // Ask if user wants to enter another item
             input.nextLine(); // consume leftover newline
             System.out.print("\nDo you want to enter another item? (y/n): ");
             continueEntry = input.nextLine();
@@ -76,6 +74,38 @@ public class OrderEntryPhase2 {
                 System.out.print("Invalid response. Please enter 'y' or 'n': ");
                 continueEntry = input.nextLine();
             }
+        }
+
+        // Print table header
+        System.out.printf("%-12s %-20s %10s %5s %7s %10s %7s %10s %10s%n",
+                "Item Number", "Item Description", "Price", "Qty", "Tax %", "Tax Amt",
+                "Disc %", "Disc Amt", "Net Amt");
+
+        // Totals
+        int totalItems = 0;
+        double totalGross = 0;
+        double totalTax = 0;
+        double totalDiscount = 0;
+        double totalNet = 0;
+
+        // Print all items
+        for (Item item : items) {
+            System.out.printf("%-12s %-20s %10s %5d %7s %10s %7s %10s %10s%n",
+                    item.itemNumber,
+                    item.itemDescription.length() > 20 ? item.itemDescription.substring(0, 20) : item.itemDescription,
+                    df.format(item.itemPrice),
+                    item.quantity,
+                    df.format(item.taxPercent),
+                    df.format(item.taxAmount),
+                    df.format(item.discountPercent),
+                    df.format(item.discountAmount),
+                    df.format(item.netAmount));
+
+            totalItems++;
+            totalGross += item.grossAmount;
+            totalTax += item.taxAmount;
+            totalDiscount += item.discountAmount;
+            totalNet += item.netAmount;
         }
 
         // Display totals
