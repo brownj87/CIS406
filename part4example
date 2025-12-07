@@ -1,0 +1,134 @@
+import java.util.Scanner;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+public class OrderEntryPhase3 {
+
+    static class Item {
+        String itemNumber;
+        String itemDescription;
+        double itemPrice;
+        int quantity;
+        double taxPercent;
+        double discountPercent;
+        double grossAmount;
+        double taxAmount;
+        double discountAmount;
+        double netAmount;
+
+        Item(String itemNumber, String itemDescription, double itemPrice, int quantity,
+             double taxPercent, double discountPercent) {
+            this.itemNumber = itemNumber;
+            this.itemDescription = itemDescription;
+            this.itemPrice = itemPrice;
+            this.quantity = quantity;
+            this.taxPercent = taxPercent;
+            this.discountPercent = discountPercent;
+            this.grossAmount = itemPrice * quantity;
+            this.taxAmount = grossAmount * (taxPercent / 100);
+            this.discountAmount = grossAmount * (discountPercent / 100);
+            this.netAmount = grossAmount + taxAmount - discountAmount;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        DecimalFormat df = new DecimalFormat("#0.00");
+        ArrayList<Item> items = new ArrayList<>();
+        String invoice = ""; // Full invoice string
+
+        // ------------------- Customer Info -------------------
+        System.out.print("Enter invoice date (MM/DD/YYYY): ");
+        String invoiceDate = input.nextLine();
+        invoice += "Invoice Date: " + invoiceDate + "\n";
+
+        System.out.print("Enter customer name: ");
+        String customerName = input.nextLine();
+        System.out.print("Enter street address: ");
+        String customerStreet = input.nextLine();
+        System.out.print("Enter city: ");
+        String customerCity = input.nextLine();
+        System.out.print("Enter state: ");
+        String customerState = input.nextLine();
+        System.out.print("Enter ZIP code: ");
+        String customerZip = input.nextLine();
+
+        invoice += "Customer: " + customerName + "\n";
+        invoice += customerStreet + "\n";
+        invoice += customerCity + ", " + customerState + " " + customerZip + "\n\n";
+
+        // ------------------- Table Header -------------------
+        String headerFormat = "%-12s %-25s %10s %5s %12s %12s %7s %12s %7s %12s %12s%n";
+        invoice += String.format(headerFormat,
+                "Item Number", "Description", "Price", "Qty", "Gross Amt", "Gross+Tax",
+                "Tax %", "Tax Amt", "Disc %", "Disc Amt", "Net Amt");
+
+        String continueEntry = "y";
+
+        int totalItems = 0;
+        double totalGross = 0;
+        double totalTax = 0;
+        double totalDiscount = 0;
+        double totalNet = 0;
+
+        // ------------------- Item Entry -------------------
+        while (!continueEntry.equalsIgnoreCase("n")) {
+            System.out.print("Enter item number: ");
+            String itemNumber = input.nextLine();
+            System.out.print("Enter item description: ");
+            String itemDescription = input.nextLine();
+            System.out.print("Enter item price: $");
+            double itemPrice = input.nextDouble();
+            System.out.print("Enter quantity ordered: ");
+            int quantity = input.nextInt();
+            System.out.print("Enter tax percent: ");
+            double taxPercent = input.nextDouble();
+            System.out.print("Enter discount percent: ");
+            double discountPercent = input.nextDouble();
+
+            Item item = new Item(itemNumber, itemDescription, itemPrice, quantity, taxPercent, discountPercent);
+            items.add(item);
+
+            // Append item details to invoice string
+            double grossPlusTax = item.grossAmount + item.taxAmount;
+            invoice += String.format(headerFormat,
+                    item.itemNumber,
+                    item.itemDescription.length() > 25 ? item.itemDescription.substring(0, 25) : item.itemDescription,
+                    df.format(item.itemPrice),
+                    item.quantity,
+                    df.format(item.grossAmount),
+                    df.format(grossPlusTax),
+                    df.format(item.taxPercent),
+                    df.format(item.taxAmount),
+                    df.format(item.discountPercent),
+                    df.format(item.discountAmount),
+                    df.format(item.netAmount));
+
+            totalItems++;
+            totalGross += item.grossAmount;
+            totalTax += item.taxAmount;
+            totalDiscount += item.discountAmount;
+            totalNet += item.netAmount;
+
+            input.nextLine(); // consume leftover newline
+            System.out.print("Do you want to enter another item? (y/n): ");
+            continueEntry = input.nextLine();
+            while (!continueEntry.equalsIgnoreCase("y") && !continueEntry.equalsIgnoreCase("n")) {
+                System.out.print("Invalid response. Please enter 'y' or 'n': ");
+                continueEntry = input.nextLine();
+            }
+        }
+
+        // ------------------- Display Invoice -------------------
+        System.out.println("\n\n===== FULL INVOICE =====");
+        System.out.println(invoice);
+
+        // ------------------- Separate Totals Table -------------------
+        System.out.println("\n===== INVOICE TOTALS =====");
+        String totalsFormat = "%-20s %12s %12s %12s %12s%n";
+        System.out.printf(totalsFormat, "Total Line Items", "Total Gross", "Total Tax", "Total Discount", "Total Net");
+        System.out.printf(totalsFormat, totalItems, df.format(totalGross), df.format(totalTax), df.format(totalDiscount), df.format(totalNet));
+
+        input.close();
+    }
+}
