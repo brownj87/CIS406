@@ -58,10 +58,10 @@ public class OrderEntryPhase3 {
         invoice += customerCity + ", " + customerState + " " + customerZip + "\n\n";
 
         // ------------------- Table Header -------------------
-        String headerFormat = "%-12s %-25s %10s %5s %12s %12s %7s %12s %7s %12s %12s%n";
+        String headerFormat = "%-12s %-25s %10s %5s %12s %7s %12s %12s %7s %12s %12s%n";
         invoice += String.format(headerFormat,
-                "Item Number", "Description", "Price", "Qty", "Gross Amt", "Gross+Tax",
-                "Tax %", "Tax Amt", "Disc %", "Disc Amt", "Net Amt");
+                "Item Number", "Description", "Price", "Qty", "Gross Amt",
+                "Tax %", "Tax Amt", "Gross+Tax", "Disc %", "Disc Amt", "Net Amt");
 
         String continueEntry = "y";
 
@@ -97,9 +97,9 @@ public class OrderEntryPhase3 {
                     df.format(item.itemPrice),
                     item.quantity,
                     df.format(item.grossAmount),
-                    df.format(grossPlusTax),
                     df.format(item.taxPercent),
                     df.format(item.taxAmount),
+                    df.format(grossPlusTax),
                     df.format(item.discountPercent),
                     df.format(item.discountAmount),
                     df.format(item.netAmount));
