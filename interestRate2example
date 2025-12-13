@@ -1,5 +1,5 @@
 // Jordan Brown, CIS406, Interest Rate Calculator Part 2
-package interestRateCalculatorPart1;
+package interestRateCalculatorPart2;
 
 import java.util.Scanner;
 import java.text.DecimalFormat;
