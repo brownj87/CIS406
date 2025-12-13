@@ -1,0 +1,107 @@
+// Jordan Brown CIS 406 Vacation Diary - Part 2
+package vacationdiary1;
+
+import java.util.Scanner;
+
+public class VacationDiary2 {
+
+    // Validate date (mmddyyyy numeric) or End
+    public static String validateDate(Scanner input) {
+        while (true) {
+            System.out.print("Enter Date Vacation Started (mmddyyyy) or End to quit: ");
+            String date = input.nextLine();
+
+            if (date.equalsIgnoreCase("End")) {
+                return "End";
+            }
+
+            if (date.matches("\\d{8}")) {
+                return date;
+            }
+
+            System.out.println("Invalid date format. Please re-enter");
+        }
+    }
+
+    // Validate number of days (1–30)
+    public static int validateDays(Scanner input) {
+        while (true) {
+            System.out.print("Enter number of days: ");
+            try {
+                int days = Integer.parseInt(input.nextLine());
+                if (days >= 1 && days <= 30) {
+                    return days;
+                }
+                System.out.println("Days must be between 1 and 30");
+            } catch (Exception e) {
+                System.out.println("Days must be between 1 and 30");
+            }
+        }
+    }
+
+    // Pad or truncate to 10 characters (matches screenshot)
+    public static String format10(String text) {
+        if (text.length() > 10) {
+            return text.substring(0, 10);
+        }
+        return String.format("%-10s", text);
+    }
+
+    // Validate travel mode
+    public static String validateTravelMode(Scanner input) {
+        while (true) {
+            System.out.print("Enter Mode of Travel (car, airplane, ship, train, bus): ");
+            String mode = input.nextLine().toLowerCase();
+
+            if (mode.equals("car") || mode.equals("airplane") ||
+                mode.equals("ship") || mode.equals("train") ||
+                mode.equals("bus")) {
+                return mode;
+            }
+
+            System.out.println("Please enter a valid travel mode");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        String table = "";
+        table += "=====================================================================\n";
+        table += "====================== Vacation Diary ================================\n";
+        table += "Date\t\tCity\t\tCountry\t\tDays\tMode\n";
+        table += "==========\t==========\t==========\t====\t==========\n";
+
+        while (true) {
+
+            String date = validateDate(input);
+            if (date.equals("End")) {
+                break;
+            }
+
+            System.out.print("Enter City Visited: ");
+            String city = format10(input.nextLine());
+
+            System.out.print("Enter Country Visited: ");
+            String country = format10(input.nextLine());
+
+            int days = validateDays(input);
+            String mode = validateTravelMode(input);
+
+            table += date + "\t\t" +
+                     city + "\t" +
+                     country + "\t" +
+                     days + "\t" +
+                     mode + "\n";
+        }
+
+        table += "=====================================================================\n";
+
+        System.out.println();
+        System.out.println(table);
+        System.out.println("Bye!!!");
+
+        input.close();
+    }
+}
