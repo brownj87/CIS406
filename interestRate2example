@@ -1,0 +1,70 @@
+// Jordan Brown, CIS406, Interest Rate Calculator Part 2
+package interestRateCalculatorPart1;
+
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class InterestRateCalculatorPart2 {
+
+    // Function to safely get numeric input
+    public static double getNumericInput(Scanner input, String prompt) {
+        double value = 0;
+        boolean valid = false;
+
+        while (!valid) {
+            try {
+                System.out.print(prompt);
+                value = input.nextDouble();
+                valid = true;
+            } catch (Exception e) {
+                System.out.println("Invalid entry. Please enter a numeric value.");
+                input.nextLine(); // clear invalid input
+            }
+        }
+        return value;
+    }
+
+    // Function to calculate interest
+    public static double calculateInterest(double loanAmount, double interestRate) {
+        return loanAmount * (interestRate / 100);
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        DecimalFormat moneyFormat = new DecimalFormat("$###,###,###.00");
+        DecimalFormat percentFormat = new DecimalFormat("0.#'%'");
+
+        System.out.println("Welcome to the Interest Calculator\n");
+
+        char cont = 'y';
+
+        // Loop continues until user enters 'n' or 'N'
+        while (cont != 'n' && cont != 'N') {
+
+            // Get loan amount
+            double loanAmount = getNumericInput(input, "Enter loan amount: ");
+
+            // Get interest rate
+            double interestRate = getNumericInput(input, "Enter interest rate: ");
+
+            // Calculate interest
+            double interest = calculateInterest(loanAmount, interestRate);
+
+            // Display results
+            System.out.println();
+            System.out.println("Loan amount:\t\t " + moneyFormat.format(loanAmount));
+            System.out.println("Interest rate:\t\t " + percentFormat.format(interestRate));
+            System.out.println("Interest:\t\t " + moneyFormat.format(interest));
+            System.out.println();
+
+            // Continue?
+            System.out.print("Continue? (y/n): ");
+            cont = input.next().charAt(0);
+            System.out.println();
+        }
+
+        System.out.println("Bye!!!");
+        input.close();
+    }
+}
